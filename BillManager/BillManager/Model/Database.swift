@@ -6,7 +6,7 @@ import UIKit
 class Database {
     //MARK: - Properties
     static let billUpdatedNotification = NSNotification.Name("com.apple.BillManager.billUpdated")
-
+    
     static let shared = Database()
     
     private var _billsOptional: [UUID:Bill]?
@@ -69,7 +69,7 @@ class Database {
         save()
         NotificationCenter.default.post(name: Self.billUpdatedNotification, object: nil)
     }
-        
+    
     func save() {
         saveBills(_billsLookup)
     }

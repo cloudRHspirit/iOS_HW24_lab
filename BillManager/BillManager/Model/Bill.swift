@@ -17,12 +17,4 @@ struct Bill: Codable {
 }
 
 //MARK: - Extensions
-extension Bill: Hashable {
-//    static func ==(_ lhs: Bill, _ rhs: Bill) -> Bool {
-//        return lhs.id == rhs.id
-//    }
-//
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
-}
+extension Bill: Hashable {}

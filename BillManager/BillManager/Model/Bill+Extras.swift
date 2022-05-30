@@ -44,7 +44,6 @@ extension Bill {
                 DispatchQueue.main.async {
                     completion(updatedBill)
                 }
-                
                 return
             }
             
