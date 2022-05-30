@@ -1,45 +1,13 @@
-//
-//  Database.swift
-//  BillManager
-//
-
+//MARK: - Importing Frameworks
 import Foundation
 import UIKit
 
+//MARK: - Classes
 class Database {
-    
+    //MARK: - Properties
     static let billUpdatedNotification = NSNotification.Name("com.apple.BillManager.billUpdated")
 
     static let shared = Database()
-        
-    private func loadBills() -> [UUID:Bill]? {
-        var bills = [UUID:Bill]()
-        
-        do {
-            let storageDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let storageURL = storageDirectory.appendingPathComponent("bills").appendingPathExtension("json")
-            let fileData = try Data(contentsOf: storageURL)
-            let billsArray = try JSONDecoder().decode([Bill].self, from: fileData)
-            bills = billsArray.reduce(into: bills) { partial, bill in
-                partial[bill.id] = bill
-            }
-        } catch {
-            return nil
-        }
-        
-        return bills
-    }
-    
-    private func saveBills(_ bills: [UUID:Bill]) {
-        do {
-            let storageDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let storageURL = storageDirectory.appendingPathComponent("bills").appendingPathExtension("json")
-            let fileData = try JSONEncoder().encode(Array(bills.values))
-            try fileData.write(to: storageURL)
-        } catch {
-            fatalError("There was a problem saving bills. Error: \(error)")
-        }
-    }
     
     private var _billsOptional: [UUID:Bill]?
     private var _billsLookup: [UUID:Bill] {
@@ -58,6 +26,35 @@ class Database {
     var bills: [Bill] {
         get {
             return Array(_billsLookup.values.sorted(by: <))
+        }
+    }
+    
+    //MARK: - Methods
+    private func loadBills() -> [UUID:Bill]? {
+        var bills = [UUID:Bill]()
+        
+        do {
+            let storageDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let storageURL = storageDirectory.appendingPathComponent("bills").appendingPathExtension("json")
+            let fileData = try Data(contentsOf: storageURL)
+            let billsArray = try JSONDecoder().decode([Bill].self, from: fileData)
+            bills = billsArray.reduce(into: bills) { partial, bill in
+                partial[bill.id] = bill
+            }
+        } catch {
+            return nil
+        }
+        return bills
+    }
+    
+    private func saveBills(_ bills: [UUID:Bill]) {
+        do {
+            let storageDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let storageURL = storageDirectory.appendingPathComponent("bills").appendingPathExtension("json")
+            let fileData = try JSONEncoder().encode(Array(bills.values))
+            try fileData.write(to: storageURL)
+        } catch {
+            fatalError("There was a problem saving bills. Error: \(error)")
         }
     }
     

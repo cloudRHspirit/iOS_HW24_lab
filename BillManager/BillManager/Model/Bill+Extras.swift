@@ -1,10 +1,7 @@
-//
-//  Bill+Extras.swift
-//  BillManager
-//
-
+//MARK: - Importing Frameworks
 import Foundation
 
+//MARK: - Extensions
 extension Bill {
     var hasReminder: Bool {
         return (remindDate != nil)
@@ -22,8 +19,6 @@ extension Bill {
         } else {
             dateString = ""
         }
-        
         return dateString
     }
-    
 }

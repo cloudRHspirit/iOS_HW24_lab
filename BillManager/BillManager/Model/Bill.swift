@@ -1,7 +1,7 @@
-// BillManager
-
+//MARK: - Importing Frameworks
 import Foundation
 
+//MARK: - Structures
 struct Bill: Codable {
     let id: UUID
     var amount: Double?
@@ -15,6 +15,7 @@ struct Bill: Codable {
     }
 }
 
+//MARK: - Extensions
 extension Bill: Hashable {
 //    static func ==(_ lhs: Bill, _ rhs: Bill) -> Bool {
 //        return lhs.id == rhs.id
