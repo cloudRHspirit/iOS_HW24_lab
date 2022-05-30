@@ -118,6 +118,16 @@ class BillDetailTableViewController: UITableViewController, UITextFieldDelegate 
         }
     }
     
+    func presentNeedAuthorizationAlert() {
+        let alert = UIAlertController(title: "Authorization Needed", message: "We can't set reminders for you without notification permissions. Please go to the iOS Settings app and grant us notification permissions if you wish to make use of reminders.", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
+        
+        alert.addAction(okAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         var bill = self.bill ?? Database.shared.addBill()
         
@@ -127,11 +137,16 @@ class BillDetailTableViewController: UITableViewController, UITextFieldDelegate 
         bill.paidDate = paidDate
         
         if remindSwitch.isOn {
-            bill.remindDate = remindDatePicker.date
+            bill.schedulingReminders(date: remindDatePicker.date) { (updatedBill) in
+                if updatedBill.notificationID == nil {
+                    self.presentNeedAuthorizationAlert()
+                }
+                Database.shared.updateAndSave(updatedBill)
+            }
         } else {
-            bill.remindDate = nil
+            bill.removingReminders()
+            Database.shared.updateAndSave(bill)
         }
-        Database.shared.updateAndSave(bill)
     }
     
     //MARK: - TableView Methods
